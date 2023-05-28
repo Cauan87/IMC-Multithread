@@ -1,9 +1,7 @@
 class App():
     def __init__(self):
         App.title("The shape of us!")
-        print()
-        print("=> Informe alguns dados para começar: ")
-        print()
+        print("\n=> Informe alguns dados para começar: \n")
         App.generateHeader()
 
     @classmethod
@@ -14,8 +12,8 @@ class App():
     @classmethod
     def generateHeader(cls):
         print("OBS: O Nivel de atividade varia de 1 (Sedentário) a 4 (Muito Ativo) !")
-        print("Ex: {:^8s} {:^22s} {:^14s} {:^20s} {:^10s} ".format("1.70", "70.0", "M", "3", "20"))
-        print()
+        print("Ex: {:^8s} {:^22s} {:^14s} {:^20s} {:^10s} \n".format("1.70", "70.0", "M", "3", "20"))
+        
 
     @classmethod
     def row(cls):
@@ -65,16 +63,12 @@ class App():
                 userData = App.generateDict(list)
 
             except IndexError:
-                print()
-                print('Preencha todos os dados para prosseguir!'.upper())
-                print()
+                print('\nPreencha todos os dados para prosseguir!\n'.upper())
                 App.generateHeader()
                 values = App.collectUserData()
 
             except ValueError:
-                print()
-                print('Valor inválido!'.upper())
-                print()
+                print('\nValor inválido!\n'.upper())
                 App.generateHeader()
                 values = App.collectUserData()
 
@@ -98,8 +92,7 @@ class App():
     def printresult(cls, list):
         print()
         App.row()
-        print('|{:^25s}||{:^25s}||{:^25s}|'.format(str(list[0][0]), str(list[0][1]),
-                                                   str(list[0][2])))
+        print('|{:^25s}||{:^25s}||{:^25s}|'.format(str(list[0][0]), str(list[0][1]),str(list[0][2])))
         App.row()
 
     @classmethod
@@ -111,16 +104,14 @@ class App():
                    ['Entre: ', '25,0 e 29,9', 'Sobrepeso!'],
                    ['Entre: ', '30,0 e 34,9', 'Obesidade Grau 1!'],
                    ['Entre: ', '35,0 e 39,9', 'Obesidade Grau 2!'],
-                   ['Mais do que: ', '40,0', 'Obesidade Grau 3!'],
-                   ]
+                   ['Mais do que: ', '40,0', 'Obesidade Grau 3!']]
 
         # analysingImc -> status
         result = [['SEU IMC: ', str(imc), status]]
         print()
         for row in range(0, len(content)):
             App.rowTable()
-            print('|{:^25s}||{:^25s}||{:^25s}|'.format(content[row][0], content[row][1],
-                                                       content[row][2]))
+            print('|{:^25s}||{:^25s}||{:^25s}|'.format(content[row][0], content[row][1],content[row][2]))
             if row == 6:
                 App.rowTable()
                 App.printresult(result)
@@ -135,19 +126,16 @@ class App():
 
         for row in range(0, len(content)):
             App.rowTable()
-            print('|{:^25}||{:^25}||{:^25}|'.format(str(content[row][0]), str(content[row][1]) + " kcal",
-                                                    str(content[row][2]) + " g"))
+            print('|{:^25}||{:^25}||{:^25}|'.format(str(content[row][0]), str(content[row][1]) + " kcal",str(content[row][2]) + " g"))
             App.rowTable()
 
     @classmethod
     def menu(cls, response):
         while True:
             App.padding()
-            print("=> Selecione uma opção: ")
-            print()
-            print('{:^16s}{:^18s}{:^18s}{:^18s}{:2s}'.format("1 - IMC", "2 - TMB", "3 -  QTD KCAL", "4 - SAIR", ""),
-                  end="\t")
-            opt = input()
+            print("=> Selecione uma opção: \n")
+            print('{:^16s}{:^18s}{:^18s}{:^18s}{:2s}'.format("1 - IMC", "2 - TMB", "3 -  QTD KCAL", "4 - SAIR", ""),end="\t")
+            opt = input("\n")
             App.padding()
 
             if opt == "1":
@@ -155,8 +143,7 @@ class App():
                 print()
                 print("{:^81s}".format("O Indice de Massa Corporal (IMC) é um parâmetro"))
                 print("{:^81s}".format("utilizado para saber se o peso está de acordo com a altura de um"))
-                print(
-                    "{:^81s}".format("indivíduo, o que pode interferir diretamente na sua saúde e qualidade de vida!"))
+                print("{:^81s}".format("indivíduo, o que pode interferir diretamente na sua saúde e qualidade de vida!"))
                 App.creatTableImc(response["imc"], response["statusImc"])
 
             elif opt == "2":
@@ -173,15 +160,12 @@ class App():
             elif opt == "3":
                 nut = response["nutrientes"]
                 App.title("Quantidade de Calorias: ")
-                print()
-                print("{:^81s}".format("Calorias são a quantidade de energia que um determinado alimento"))
+                print("\n{:^81s}".format("Calorias são a quantidade de energia que um determinado alimento"))
                 print("{:^81s}".format("fornece após ser consumido, contribuindo para as funções essenciais do"))
-                print(
-                    "{:^81s}".format("organismo, como respiração, produção de hormônios, e funcionamento do cérebro."))
+                print("{:^81s}".format("organismo, como respiração, produção de hormônios, e funcionamento do cérebro."))
 
-                print()
-                print("{:^81s}".format("Você deve consumir aproximadamente: "))
-                print()
+                print("\n{:^81s}\n".format("Você deve consumir aproximadamente: "))
+
                 App.creatTableQtdCal(nut)
 
                 result = [['RESULTADO :', 'SUA QTD DE KCAL:', str(response['cal']) + " kcal"]]
