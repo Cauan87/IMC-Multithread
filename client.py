@@ -21,11 +21,11 @@ client_socket.connect(server_id_port)
 client_app = App()
 
 # collecting user data
-values = client_app.collectUserData()
+values = client_app.collect_user_data()
 
 # processing user data
-list_data = client_app.validateData(values)
-final_data = client_app.generateDict(list_data)
+list_data = client_app.validate_data(values)
+final_data = client_app.generate_dict(list_data)
 
 # serialising data
 # pass the data to json

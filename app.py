@@ -6,15 +6,13 @@ class App():
 
     @classmethod
     def padding(cls):
-        print()
-        print()
+        print("\n\n")
 
     @classmethod
     def generate_header(cls):
         print("OBS: O Nivel de atividade varia de 1 (Sedentário) a 4 (Muito Ativo) !")
         print("Ex: {:^8s} {:^22s} {:^14s} {:^20s} {:^10s} \n".format("1.70", "70.0", "M", "3", "20"))
         
-
     @classmethod
     def row(cls):
         print('*' * 81)
@@ -43,18 +41,26 @@ class App():
         App.row()
 
         return user_data
-
+    
     @classmethod
     def list_user_data(cls, values):
         list = []
         for i in values:
-            if i != "":
-                if (i in "Mm" or i in "Ff"):
-                    list.append(i)
-                else:
-                    list.append(float(i))
+            App.scroll_list(i, list)
         return list
 
+    @classmethod
+    def scroll_list(cls, index, list):
+        if index != "":
+            App.validate_value(index, list)
+    
+    @classmethod
+    def validate_value(cls, index, list):
+        if index in "Mm" or index in "Ff":
+            list.append(index)
+        else:
+            list.append(float(index))
+    
     @classmethod
     def validate_data(cls, values):
         while True:
@@ -82,12 +88,15 @@ class App():
     def generate_dict(cls, list):
         dic = {'altura': None, 'peso': None, 'sexo': None, 'nvlAtiv': None, 'idade': None}
         cont = 0
-        for k, v in dic.items():
+        App.scroll_dict(list, dic, cont)
+        return dic
+    
+    @classmethod
+    def scroll_dict(cls, list, dic, cont):
+        for k,v in dic.items():
             dic[k] = list[cont]
             cont += 1
-
-        return dic
-
+    
     @classmethod
     def print_result(cls, list):
         print()
@@ -108,13 +117,20 @@ class App():
 
         # analysingImc -> status
         result = [['SEU IMC: ', str(imc), status]]
-        print()
+        App.scroll_table(content, result)
+
+    @classmethod
+    def scroll_table(cls, content, result):
         for row in range(0, len(content)):
             App.row_table()
             print('|{:^25s}||{:^25s}||{:^25s}|'.format(content[row][0], content[row][1],content[row][2]))
-            if row == 6:
-                App.row_table()
-                App.print_result(result)
+            App.check_row(row, result)
+
+    @classmethod
+    def check_row(cls, row, result):
+        if row == 6:
+            App.row_table()
+            App.print_result(result)
 
     @classmethod
     def creat_table_qtd_cal(cls, dict):
@@ -124,11 +140,15 @@ class App():
             ["Gorduras", dict["gorduras"], round(float((dict["gorduras"])) / 9.0, 2)]
         ]
 
+        App.scroll_table_special(content)
+
+    @classmethod
+    def scroll_table_special(cls, content):
         for row in range(0, len(content)):
             App.row_table()
             print('|{:^25}||{:^25}||{:^25}|'.format(str(content[row][0]), str(content[row][1]) + " kcal",str(content[row][2]) + " g"))
             App.row_table()
-
+        
     @classmethod
     def menu(cls, response):
         while True:
@@ -137,45 +157,36 @@ class App():
             print('{:^16s}{:^18s}{:^18s}{:^18s}{:2s}'.format("1 - IMC", "2 - TMB", "3 -  QTD KCAL", "4 - SAIR", ""),end="\t")
             opt = input("\n")
             App.padding()
-
-            if opt == "1":
-                App.title("IMC")
-                print()
-                print("{:^81s}".format("O Indice de Massa Corporal (IMC) é um parâmetro"))
-                print("{:^81s}".format("utilizado para saber se o peso está de acordo com a altura de um"))
-                print("{:^81s}".format("indivíduo, o que pode interferir diretamente na sua saúde e qualidade de vida!"))
-                App.creat_table_imc(response["imc"], response["statusImc"])
-
-            elif opt == "2":
-                App.title("Taxa Metabólica Basal: ")
-                print()
-                print("{:^81s}".format("A Taxa de Metabolismo Basal (TMB) é a quantidade"))
-                print("{:^81s}".format("mínima de energia (calorias) necessária para manter as"))
-                print("{:^81s}".format("funções vitais do organismo em repouso. Essa taxa pode variar"))
-                print("{:^81s}".format("de acordo com o sexo, peso, altura, idade e nível de atividade física."))
-
-                result = [['RESULTADO :', 'SUA TMB:', str(response['tmb']) + " kcal"]]
-                App.print_result(result)
-
-            elif opt == "3":
-                nut = response["nutrientes"]
-                App.title("Quantidade de Calorias: ")
-                print("\n{:^81s}".format("Calorias são a quantidade de energia que um determinado alimento"))
-                print("{:^81s}".format("fornece após ser consumido, contribuindo para as funções essenciais do"))
-                print("{:^81s}".format("organismo, como respiração, produção de hormônios, e funcionamento do cérebro."))
-
-                print("\n{:^81s}\n".format("Você deve consumir aproximadamente: "))
-
-                App.creat_table_qtd_cal(nut)
-
-                result = [['RESULTADO :', 'SUA QTD DE KCAL:', str(response['cal']) + " kcal"]]
-                App.print_result(result)
-
-            elif opt == "4":
-                print('{:^79s}'.format("Obrigado por usar nosso App !"))
-                App.padding()
-                App.row()
-                break
-
-            else:
-                print("Erro: Opção Inválida!")
+            match opt:
+                case "1":
+                    App.title("IMC")
+                    print("\n{:^81s}".format("O Indice de Massa Corporal (IMC) é um parâmetro"))
+                    print("{:^81s}".format("utilizado para saber se o peso está de acordo com a altura de um"))
+                    print("{:^81s}".format("indivíduo, o que pode interferir diretamente na sua saúde e qualidade de vida!"))
+                    App.creat_table_imc(response["imc"], response["statusImc"])
+                case "2":
+                    App.title("Taxa Metabólica Basal: ")
+                    print()
+                    print("{:^81s}".format("A Taxa de Metabolismo Basal (TMB) é a quantidade"))
+                    print("{:^81s}".format("mínima de energia (calorias) necessária para manter as"))
+                    print("{:^81s}".format("funções vitais do organismo em repouso. Essa taxa pode variar"))
+                    print("{:^81s}".format("de acordo com o sexo, peso, altura, idade e nível de atividade física."))
+                    result = [['RESULTADO :', 'SUA TMB:', str(response['tmb']) + " kcal"]]
+                    App.print_result(result)
+                case "3":
+                    nut = response["nutrientes"]
+                    App.title("Quantidade de Calorias: ")
+                    print("\n{:^81s}".format("Calorias são a quantidade de energia que um determinado alimento"))
+                    print("{:^81s}".format("fornece após ser consumido, contribuindo para as funções essenciais do"))
+                    print("{:^81s}".format("organismo, como respiração, produção de hormônios, e funcionamento do cérebro."))
+                    print("\n{:^81s}\n".format("Você deve consumir aproximadamente: "))
+                    App.creat_table_qtd_cal(nut)
+                    result = [['RESULTADO :', 'SUA QTD DE KCAL:', str(response['cal']) + " kcal"]]
+                    App.print_result(result)
+                case "4":
+                    print('{:^79s}'.format("Obrigado por usar nosso App !"))
+                    App.padding()
+                    App.row()
+                    break
+                case _:
+                    print("Erro: Opção Inválida!")
